@@ -22,7 +22,7 @@ export class PostRepository implements IPostRepository {
     async findById(postId: number): Promise<IPost | null> {
         return this.repository.findOne({
             where: { postId },
-            relations: ['disciplina', 'autor', 'comentarios' ]
+            relations: ['disciplina', 'autor', 'comentarios', 'comentarios.autor' ]
         });
     }
 

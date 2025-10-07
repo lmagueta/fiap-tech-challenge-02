@@ -37,7 +37,7 @@ export async function signin(req: Request, res: Response) {
         { expiresIn: "10m" }
         );
 
-        return res.status(200).json({ token, adminPermission });
+        return res.status(200).json({ token, adminPermission, userId: usuario.userId });
     } catch (error) {
         if (error instanceof InvalidCredentialsError) {
         return res.status(401).json({ message: "Invalid credentials" });
