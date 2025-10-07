@@ -31,11 +31,11 @@ export async function createComentario(req: Request, res: Response) {
             postId: z.coerce.number(),
             titulo: z.string(),
             conteudo: z.string(),
-            disciplinaId: z.object({
+            disciplina: z.object({
                 disciplinaId: z.coerce.number(),
                 nome: z.string()
             }),
-            autorId: z.object({
+            autor: z.object({
                 userId: z.coerce.number(),
                 nome: z.string(),
                 email: z.string(),
@@ -46,7 +46,7 @@ export async function createComentario(req: Request, res: Response) {
                 })
             })
         }),
-        autorId: z.object({
+        autor: z.object({
             userId: z.coerce.number(),
             nome: z.string(),
             email: z.string(), 
@@ -59,18 +59,19 @@ export async function createComentario(req: Request, res: Response) {
         conteudo: z.string()
     });
 
-    const { comentarioId, postId, autorId, conteudo } = registerBodySchema.parse(req.body);
+    const { comentarioId, postId, autor, conteudo } = registerBodySchema.parse(req.body);
     
     const postIdWithDates = {
         ...postId,
         dtCriacao: new Date(),
-        dtAtualizacao: new Date()
+        dtAtualizacao: new Date(),
+        comentarios: []
     };
     const createComentarioUseCase = makeCreateComentarioUseCase();
 
     const comentario = await createComentarioUseCase.handler({
-        postId: postIdWithDates,
-        autorId,
+        post: postIdWithDates,
+        autor,
         conteudo,
         dtCriacao: new Date(),
         dtAtualizacao: new Date()
@@ -88,15 +89,15 @@ export async function updateComentario(req: Request, res: Response) {
     
     const registerBodySchema = z.object({
         comentarioId: z.string().optional(),
-        postId: z.object({
+        post: z.object({
             postId: z.coerce.number(),
             titulo: z.string(),
             conteudo: z.string(),
-            disciplinaId: z.object({
+            disciplina: z.object({
                 disciplinaId: z.coerce.number(),
                 nome: z.string()
             }),
-            autorId: z.object({
+            autor: z.object({
                 userId: z.coerce.number(),
                 nome: z.string(),
                 email: z.string(),
@@ -109,7 +110,7 @@ export async function updateComentario(req: Request, res: Response) {
             dtAtualizacao: z.coerce.date(),
             dtCriacao: z.coerce.date()
         }),
-        autorId: z.object({
+        autor: z.object({
             userId: z.coerce.number(),
             nome: z.string(),
             email: z.string(), 
@@ -122,14 +123,19 @@ export async function updateComentario(req: Request, res: Response) {
         conteudo: z.string()
     });
 
-    const { postId, autorId, conteudo } = registerBodySchema.parse(req.body);
-
+    const { post, autor, conteudo } = registerBodySchema.parse(req.body);
+    const postWithComentarios = {
+        ...post,
+        dtAtualizacao: new Date(),
+        dtCriacao: new Date(),
+        comentarios: []
+    };
     const updateComentarioUseCase = makeUpdateComentarioUseCase();
 
     const comentario = await updateComentarioUseCase.handler({
         comentarioId,
-        postId,
-        autorId,
+        post: postWithComentarios,
+        autor,
         conteudo,
         dtAtualizacao: new Date(),
         dtCriacao: new Date()

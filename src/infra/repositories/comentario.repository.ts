@@ -17,7 +17,8 @@ export class ComentarioRepository implements IComentarioRepository {
 
     async findById(postId: number): Promise<IComentario[] | null> {
         return this.repository.find({
-            where: { postId: Equal(postId) }
+            where: { post: Equal(postId) },
+            relations: ['post', 'autor']
         });
     }
 

@@ -16,11 +16,11 @@ export class Comentario implements IComentario{
 
     @ManyToOne(() => Post)
     @JoinColumn({ name: 'postid' })
-    postId: Post;
+    post: Post;
 
     @ManyToOne(() => Usuario)
     @JoinColumn({ name: 'autorid' })
-    autorId: Usuario;
+    autor: Usuario;
 
     @Column({
         name: 'conteudo',

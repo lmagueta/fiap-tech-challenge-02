@@ -3,8 +3,8 @@ import { IUsuario } from "./usuario.interface";
 
 export interface IComentario {
     comentarioId?: number;
-    postId: IPost;
-    autorId: IUsuario;
+    post: IPost;
+    autor: IUsuario;
     conteudo: string;
     dtCriacao: Date;
     dtAtualizacao: Date;
